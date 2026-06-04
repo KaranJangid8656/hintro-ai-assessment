@@ -11,22 +11,13 @@ jobs:
     runs-on: ubuntu-latest
 
     services:
-      postgres:
-        image: postgres:16-alpine
-        env:
-          POSTGRES_USER: postgres
-          POSTGRES_PASSWORD: postgres
-          POSTGRES_DB: hintro_ai_test
+      mongodb:
+        image: mongo:6.0
         ports:
-          - 5432:5432
-        options: >-
-          --health-cmd pg_isready
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 5
+          - 27017:27017
 
     env:
-      DATABASE_URL: postgresql://postgres:postgres@localhost:5432/hintro_ai_test
+      DATABASE_URL: mongodb://localhost:27017/hintro_ai_test
       JWT_SECRET: ci-jwt-secret-key-32-characters
       NODE_ENV: test
 
@@ -39,7 +30,5 @@ jobs:
           cache: npm
 
       - run: npm ci
-      - run: npx prisma generate
-      - run: npx prisma migrate deploy
       - run: npm run lint
       - run: npm test

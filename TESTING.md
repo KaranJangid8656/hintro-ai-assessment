@@ -5,8 +5,8 @@
 | Suite | Command | Database |
 |-------|---------|----------|
 | Unit | `npm run test:unit` | Not required |
-| Integration | `npm run test:integration` | PostgreSQL required |
-| All | `npm test` | PostgreSQL required |
+| Integration | `npm run test:integration` | MongoDB required |
+| All | `npm test` | MongoDB required |
 
 ## Scenarios Covered
 
@@ -40,18 +40,19 @@
 
 ## Manual Testing
 
-1. Start Postgres + app with real `OPENAI_API_KEY`
+1. Start MongoDB + app with real `OPENAI_API_KEY`
 2. Create meeting → analyze → verify citations match transcript
 3. Create action item with past `dueDate`
 4. Set `RESEND_API_KEY`, `RESEND_FROM_EMAIL`, `REMINDER_TO_EMAIL`
 5. Trigger cron manually or wait for schedule; check `ReminderLog` table
+6. Verify email notifications received in the target inbox.
 
 ## CI
 
-GitHub Actions (`.github/workflows/ci.yml`) runs migrations against Postgres service and executes full `npm test`.
+GitHub Actions (`.github/workflows/ci.yml`) runs MongoDB service and executes full `npm test`.
 
 ## Limitations
 
-- Integration tests require local Postgres on port 5432 (or `DATABASE_URL` override)
+- Integration tests require local MongoDB on port 27017 (or `DATABASE_URL` override)
 - Reminder cron disabled when `NODE_ENV=test`
 - No live OpenAI/Resend calls in automated tests

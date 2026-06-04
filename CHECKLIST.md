@@ -23,7 +23,7 @@
 
 ## Bonus Milestones (Optional)
 
-- [x] Docker support (`docker-compose.yml` for Postgres)
+- [x] Docker support (`docker-compose.yml` for MongoDB)
 - [x] CI/CD pipeline (GitHub Actions)
 - [ ] Redis caching
 - [ ] Rate limiting

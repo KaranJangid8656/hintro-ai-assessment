@@ -1,5 +1,19 @@
 # Changelog
 
+## [1.1.0] - 2026-06-04
+
+### Changed
+
+- Migrated entire service database connection and models from PostgreSQL + Prisma to MongoDB + Mongoose.
+- Updated Zod input validation schemas to validate 24-character hexadecimal MongoDB ObjectIDs instead of UUIDs.
+- Reconfigured Jest integration test database teardown and setup to use Mongoose connections.
+- Refactored `User` model to remove duplicate email indexing and resolve Mongoose index warnings.
+- Updated Mongoose update queries to use `returnDocument: 'after'` instead of deprecated `{ new: true }` option.
+- Cleaned up leftover Prisma files and folders.
+- Updated Docker configuration (`docker-compose.yml`) to spin up MongoDB instead of PostgreSQL.
+- Updated CI/CD (`.github/workflows/ci.yml`) to run MongoDB service instead of PostgreSQL.
+- Updated technical documentation (`README.md`, `DECISIONS.md`, `TESTING.md`, `CHECKLIST.md`, `render.yaml`) to reflect MongoDB architecture.
+
 ## [1.0.0] - 2026-06-02
 
 ### Added

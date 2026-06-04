@@ -15,7 +15,7 @@ AI-powered meeting intelligence API: store meetings and transcripts, generate gr
 ## Tech Stack
 
 - Node.js 20 + TypeScript + Express
-- PostgreSQL + Prisma ORM
+- MongoDB + Mongoose
 - JWT authentication
 - OpenAI (structured JSON analysis)
 - Resend (overdue reminder emails)
@@ -25,7 +25,7 @@ AI-powered meeting intelligence API: store meetings and transcripts, generate gr
 ## Prerequisites
 
 - Node.js 20+
-- PostgreSQL 16+ (local via Docker Compose or hosted)
+- MongoDB 6.0+ (local via Docker Compose or hosted)
 - OpenAI API key (for `/analyze`)
 - Resend API key (for reminder emails)
 
@@ -39,7 +39,7 @@ cp .env.example .env
 
 | Variable | Required | Description |
 |----------|----------|-------------|
-| `DATABASE_URL` | Yes | PostgreSQL connection string |
+| `DATABASE_URL` | Yes | MongoDB connection string |
 | `JWT_SECRET` | Yes | Min 16 characters |
 | `JWT_EXPIRES_IN` | No | Default `7d` |
 | `OPENAI_API_KEY` | For analyze | OpenAI API key |
@@ -54,19 +54,18 @@ cp .env.example .env
 
 ## Local Setup
 
-### 1. Start PostgreSQL
+### 1. Start MongoDB
 
 ```bash
 docker compose up -d
 ```
 
-Creates database `hintro_ai` at `localhost:5432`.
+Creates database `hintro_ai` at `mongodb://127.0.0.1:27017/hintro_ai`.
 
-### 2. Install and migrate
+### 2. Install and run
 
 ```bash
 npm install
-npx prisma migrate deploy
 npm run dev
 ```
 
@@ -82,7 +81,7 @@ npm start
 
 ## Database Schema
 
-See [prisma/schema.prisma](prisma/schema.prisma):
+See Mongoose schemas in [src/models](file:///c:/Users/karan/OneDrive/Desktop/hintro-ai/src/models):
 
 - **User** — auth accounts
 - **Meeting** — title, participants, meetingDate
@@ -188,9 +187,7 @@ Error:
 # Unit tests (no database)
 npm run test:unit
 
-# Integration tests (requires PostgreSQL + migrations)
-createdb hintro_ai_test   # once
-DATABASE_URL=postgresql://postgres:postgres@localhost:5432/hintro_ai_test npx prisma migrate deploy
+# Integration tests (requires MongoDB)
 npm run test:integration
 
 # All tests
@@ -200,9 +197,9 @@ npm test
 ## Deployment (Render)
 
 1. Push repo to GitHub.
-2. Create **Render PostgreSQL** + **Web Service** (or use [render.yaml](render.yaml) Blueprint).
+2. Create **Render MongoDB** + **Web Service** (or use [render.yaml](render.yaml) Blueprint).
 3. Set environment variables (see `.env.example`).
-4. Build command: `npm ci && npx prisma generate && npx prisma migrate deploy && npm run build`
+4. Build command: `npm ci && npm run build`
 5. Start command: `node dist/server.js`
 6. Update `DEPLOYED_URL`, `REPOSITORY_URL`, `CANDIDATE_*` in Render dashboard.
 7. Verify `/health`, `/api-docs`, `/api/evaluation`.

@@ -1,12 +1,12 @@
 # Technical Decisions
 
-## Database: PostgreSQL + Prisma
+## Database: MongoDB + Mongoose
 
-**Why:** Meetings, transcripts, action items, and reminder logs are relational. PostgreSQL gives strong consistency, JSON columns for AI snapshots and citations, and first-class support on Render.
+**Why:** Mongoose provides flexible schemas that are well-suited for storing transcripts (hierarchical structures) and dynamic AI analysis insights (nested JSON summary, decisions, action items). 
 
-**Alternatives considered:** MongoDB (flexible schema but weaker relational queries for overdue joins); SQLite (simpler locally but less representative for production).
+**Alternatives considered:** PostgreSQL + Prisma (initially present, but migrated to MongoDB to support schema flexibility and user choice).
 
-**Trade-offs:** Requires a running Postgres instance locally/CI; migrations must be applied on deploy.
+**Trade-offs:** Relational queries like overdue joins are handled through application logic and populate/aggregate patterns rather than native SQL joins, but MongoDB excels in high-write transcript storage.
 
 ## Authentication: JWT (Bearer)
 
