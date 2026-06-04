@@ -1,0 +1,47 @@
+services:
+  - type: web
+    name: hintro-meeting-intelligence
+    runtime: node
+    plan: free
+    buildCommand: npm ci && npx prisma generate && npx prisma migrate deploy && npm run build
+    startCommand: node dist/server.js
+    healthCheckPath: /health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: DATABASE_URL
+        fromDatabase:
+          name: hintro-db
+          property: connectionString
+      - key: JWT_SECRET
+        generateValue: true
+      - key: JWT_EXPIRES_IN
+        value: 7d
+      - key: OPENAI_API_KEY
+        sync: false
+      - key: OPENAI_MODEL
+        value: gpt-4o-mini
+      - key: RESEND_API_KEY
+        sync: false
+      - key: RESEND_FROM_EMAIL
+        sync: false
+      - key: REMINDER_TO_EMAIL
+        sync: false
+      - key: CRON_REMINDER_SCHEDULE
+        value: "0 */6 * * *"
+      - key: REMINDER_COOLDOWN_HOURS
+        value: "24"
+      - key: CANDIDATE_NAME
+        sync: false
+      - key: CANDIDATE_EMAIL
+        sync: false
+      - key: REPOSITORY_URL
+        sync: false
+      - key: DEPLOYED_URL
+        sync: false
+
+databases:
+  - name: hintro-db
+    plan: free
+    databaseName: hintro_ai
+    user: hintro
